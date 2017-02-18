@@ -2,7 +2,9 @@ _Store
 
 *.class
 /bin/
-
+/errori/
+/metadata/
+/splitted/
 # Eclipse Core
 .project
 

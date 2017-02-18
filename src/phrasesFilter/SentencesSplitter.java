@@ -17,7 +17,6 @@ public class SentencesSplitter {
 	}
 
 	public void splitSentences(int j) throws IOException{
-		int contaRiga=1;
 
 		TSVSentencesUtility t = new TSVSentencesUtility();
 		List<String[]> allRows = t.getAllSentencesFromTSV(pathTofile);

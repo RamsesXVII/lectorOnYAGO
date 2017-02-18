@@ -1,4 +1,5 @@
 package IOUtility;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 //import relationIdentifier.RelationalIdentifier;
 
@@ -42,35 +42,5 @@ public class FileInteractor {
 			}
 	}
 
-/*	
-	public String writeFactsExtractedOnFile(String cleanPhrase, List<String> phraseEntitiesList,List<String> relationProv, List<String> entityListDependencies, List<String> entityListNsubj) throws UnsupportedEncodingException, FileNotFoundException, IOException {
 
-
-		FileInteractor f = new FileInteractor();
-		f.writeFile("Frase Iniziale: "+cleanPhrase, "phrasesExtracted");
-		for (String entity : phraseEntitiesList) {
-			f.writeFile(entity, "phrasesExtracted");
-		}
-		String relation = "";
-		for (String word : relationProv) {
-			relation = relation+word+" ";
-		}
-		f.writeFile("Frase relazionale: "+relation, "phrasesExtracted");
-		RelationalIdentifier ri = new RelationalIdentifier();
-		String fatto = "";
-		int i = 1;
-		for (String string : entityListDependencies) {
-			fatto = "";
-			if(!entityListNsubj.isEmpty())
-				fatto = fatto+entityListNsubj.get(0)+" ";
-			fatto = fatto+relation+" ";
-			fatto = fatto+string;
-			f.writeFile("Fatto "+i+": "+fatto, "phrasesExtracted");
-			i++;
-		}
-		f.writeFile("\n", "phrasesExtracted");
-
-		return relation;
-	}
-*/
 }

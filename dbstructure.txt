@@ -1,0 +1,24 @@
+LOAD DATA LOCAL INFILE 'C:\\Users\\matti\\Desktop\\yago_facts.tsv' INTO TABLE yagofacts (subj,rel,obj);
+LOAD DATA LOCAL INFILE 'C:\\Users\\Daniele\\Desktop\\yago\\yago_facts.tsv' INTO TABLE yagofacts (subj,rel,obj);
+
+CREATE TABLE yagoFacts (
+                subj VARCHAR(300) NOT NULL,
+                rel VARCHAR(300),
+                obj VARCHAR(300) NOT NULL,
+                PRIMARY KEY (subj,rel,obj)
+        );
+
+
+CREATE TABLE relPhraseCount (
+                rel VARCHAR(300) NOT NULL,
+                phrase VARCHAR(300),
+                sum INT,
+                PRIMARY KEY (rel,phrase)
+);
+
+CREATE TABLE relPhraseScore (
+                rel VARCHAR(300) NOT NULL,
+                phrase VARCHAR(300),
+                score DOUBLE,
+                PRIMARY KEY (rel,phrase)
+);
