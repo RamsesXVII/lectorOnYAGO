@@ -32,9 +32,9 @@ public class ProbabilityScoreDAO {
 		return f;
 	}
 	
-	public void insertRelationPhraseScore(String relation,String phraseSentence, double score) throws SQLException {
+	public void insertRelationPhraseScore(String relation,String phraseSentence, double score, double probability) throws SQLException {
 		
-		preparedStatement = connect.prepareStatement("insert into lector.relPhraseScore values('"+relation+"','"+phraseSentence+"','"+score+"');");
+		preparedStatement = connect.prepareStatement("insert into lector.relPhraseScore values('"+relation+"','"+phraseSentence+"','"+score+"','"+probability+"');");
 		preparedStatement.execute();
 		
 	}

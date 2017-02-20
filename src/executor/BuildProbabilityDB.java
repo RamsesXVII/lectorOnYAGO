@@ -16,7 +16,7 @@ public class BuildProbabilityDB {
 			System.out.println(a);
 			try {
 				ProbabilityBuilder1 mstest= new ProbabilityBuilder1();
-				mstest.getProbabilityScore();
+				mstest.getProbabilityAndScore();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

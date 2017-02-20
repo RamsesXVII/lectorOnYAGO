@@ -20,5 +20,6 @@ CREATE TABLE relPhraseScore (
                 rel VARCHAR(300) NOT NULL,
                 phrase VARCHAR(300),
                 score DOUBLE,
+                probability DOUBLE,
                 PRIMARY KEY (rel,phrase)
 );

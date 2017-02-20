@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class FactsRelationsDAO {
 
@@ -56,7 +58,7 @@ public class FactsRelationsDAO {
 			return false;
 	}
 
-	public void getAllFactsBeweenEntitiesDAO(List<String> yagoFactsBetweenEntities,String subj,String obj) throws SQLException {
+	public void getAllRelationsBeweenEntitiesDAO(List<String> yagoFactsBetweenEntities,String subj,String obj) throws SQLException {
 
 		preparedStatement = connect.prepareStatement("select * from lector.yagofacts where subj='"+subj+"' and obj='"+obj+"';");
 		resultSet = preparedStatement.executeQuery();
@@ -64,9 +66,50 @@ public class FactsRelationsDAO {
 		while(resultSet.next())
 			yagoFactsBetweenEntities.add(resultSet.getString("rel"));
 	}
+	
+	public void getAllRelationsFromScoredFacts(List<String> relations) throws SQLException {
+
+		preparedStatement = connect.prepareStatement("select distinct rel from lector.relPhraseScore;");
+		resultSet = preparedStatement.executeQuery();
+
+		while(resultSet.next())
+			relations.add(resultSet.getString("rel"));
+	}
 
 	public String extractID(String string) {
 		return string.substring(2,string.indexOf("|"));
+	}
+	
+	public void getAllFactWithScoreAndProb(List<String> yagoFactsBetweenEntities,String subj,String obj) throws SQLException {
+
+		preparedStatement = connect.prepareStatement("select * from lector.yagofacts where subj='"+subj+"' and obj='"+obj+"';");
+		resultSet = preparedStatement.executeQuery();
+
+		while(resultSet.next())
+			yagoFactsBetweenEntities.add(resultSet.getString("rel"));
+	}
+	
+	public void getMostRelevantPhrasesForRelation(String relation,Map<String,List<String>> phraseToRelation) throws SQLException {
+		double threashold=0.5;
+
+		preparedStatement = connect.prepareStatement("select rel, phrase, score from relPhraseScore where rel='"+relation+"' and probability>'"+threashold+"' limit 20;");
+		resultSet = preparedStatement.executeQuery();
+
+		String phrase;
+		
+		while(resultSet.next()){
+			phrase=resultSet.getString("phrase");
+			
+			if(phraseToRelation.containsKey(phrase))
+				phraseToRelation.get(phrase).add(relation);
+			else{
+				List<String>relationsList=new LinkedList<String>();
+				relationsList.add(relation);
+				phraseToRelation.put(phrase, relationsList);
+			}
+
+		}
+
 	}
 
 

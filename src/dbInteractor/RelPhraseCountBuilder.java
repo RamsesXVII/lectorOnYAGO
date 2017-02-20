@@ -50,7 +50,7 @@ public class RelPhraseCountBuilder {
 			try{
 
 				//se non ci sono fatti esistenti in YAGO tra le entità la lista non conterrà elementi
-				factRelDAO.getAllFactsBeweenEntitiesDAO(yagoFactsBetweenEntities,subj,obj);
+				factRelDAO.getAllRelationsBeweenEntitiesDAO(yagoFactsBetweenEntities,subj,obj);
 
 				for(String relation:yagoFactsBetweenEntities){
 

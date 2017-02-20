@@ -20,7 +20,7 @@ public class ProbabilityBuilder1 {
 
 	}
 
-	public void getProbabilityScore() throws UnsupportedEncodingException, FileNotFoundException, IOException, SQLException {
+	public void getProbabilityAndScore() throws UnsupportedEncodingException, FileNotFoundException, IOException, SQLException {
 
 		//prendo tutte le frasi
 		Set<String> distinctPhrasesThatHaveWitness = new HashSet<>();
@@ -46,7 +46,7 @@ public class ProbabilityBuilder1 {
 					double probability = witnessCount/witnessCountTotal;
 					double score = Math.log(witnessCount) * probability;
 
-					scoreDAO.insertRelationPhraseScore(phraseRelationEntry.getRelation(), phrase, score);
+					scoreDAO.insertRelationPhraseScore(phraseRelationEntry.getRelation(), phrase, score,probability);
 				}
 
 			} catch (Exception e){

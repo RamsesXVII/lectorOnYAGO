@@ -48,7 +48,7 @@ public class ProbabilityBuilder {
 				//	System.out.println("P: " + probability);	
 					double score = Math.log(witnessCount) * probability;
 				//	System.out.println("S: " + score);	
-					scoreDAO.insertRelationPhraseScore(relation, phrase, score);
+					scoreDAO.insertRelationPhraseScore(relation, phrase, score, probability);
 				}
 
 			} catch (Exception e){
