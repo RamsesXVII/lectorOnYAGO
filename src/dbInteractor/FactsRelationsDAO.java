@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -133,6 +134,19 @@ public class FactsRelationsDAO {
 
 		}
 
+	}
+	
+	public Map<String,List<String>> populatePhraseRelationMapByProbability() throws SQLException{
+		List<String> relations= new LinkedList<String>();
+		this.getAllRelationsFromScoredFacts(relations);
+
+		Map<String,List<String>> phraseToRelation=new  HashMap<String,List<String>>();
+
+		for(String relation:relations){
+			this.getMostRelevantPhrasesForRelation(relation, phraseToRelation);			
+		}
+
+		return phraseToRelation;
 	}
 
 

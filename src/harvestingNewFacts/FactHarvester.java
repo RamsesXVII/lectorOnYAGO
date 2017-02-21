@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,14 +19,18 @@ public class FactHarvester {
 	private TSVSentencesUtility tSVSentencesUtility;
 	private List<String[]> allRows;
 	private FileInteractor fileInteractor;
+	
+	private Map<String,List<String>>phraseToRelation;
 
 
-	public FactHarvester(String pathToFile) throws ClassNotFoundException, SQLException, UnsupportedEncodingException, FileNotFoundException{
+	public FactHarvester(String pathToFile,Map<String,List<String>>phraseToRelation) throws ClassNotFoundException, SQLException, UnsupportedEncodingException, FileNotFoundException{
 		this.scoreDAO = new FactsRelationsDAO();
 
 		this.tSVSentencesUtility = new TSVSentencesUtility();
 		this.allRows = tSVSentencesUtility.getAllSentencesFromTSV(pathToFile);
 		this.fileInteractor = new FileInteractor();
+		
+		this.phraseToRelation=phraseToRelation;
 
 	}
 
@@ -36,8 +39,6 @@ public class FactHarvester {
 		HashSet<String>allEntities= new HashSet<>();
 		//this.scoreDAO.getAllEntities(allEntities);
 		this.getAllEntitiesFromTSV(allEntities);
-
-		Map<String,List<String>>phraseToRelation=this.populatePhraseRelationMapByProbability();
 
 		for(String[] phrase : allRows)
 		{
@@ -87,17 +88,8 @@ public class FactHarvester {
 		
 	}
 
-	private Map<String,List<String>> populatePhraseRelationMapByProbability() throws SQLException{
-		List<String> relations= new LinkedList<String>();
-		this.scoreDAO.getAllRelationsFromScoredFacts(relations);
 
-		Map<String,List<String>> phraseToRelation=new  HashMap<String,List<String>>();
 
-		for(String relation:relations){
-			this.scoreDAO.getMostRelevantPhrasesForRelation(relation, phraseToRelation);			
-		}
 
-		return phraseToRelation;
-	}
 
 }
