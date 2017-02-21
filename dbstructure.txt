@@ -8,7 +8,6 @@ CREATE TABLE yagoFacts (
                 PRIMARY KEY (subj,rel,obj)
         );
 
-
 CREATE TABLE relPhraseCount (
                 rel VARCHAR(300) NOT NULL,
                 phrase VARCHAR(300),
