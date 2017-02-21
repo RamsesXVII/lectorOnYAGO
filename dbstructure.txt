@@ -23,3 +23,11 @@ CREATE TABLE relPhraseScore (
                 probability DOUBLE,
                 PRIMARY KEY (rel,phrase)
 );
+
+CREATE TABLE extractedFacts (
+                subj VARCHAR(300) NOT NULL,
+                phrase VARCHAR(300),
+                obj VARCHAR(300) NOT NULL,
+                rel VARCHAR(300) NOT NULL,
+                PRIMARY KEY (subj,obj,rel)
+);
