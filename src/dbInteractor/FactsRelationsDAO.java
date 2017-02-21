@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,21 @@ public class FactsRelationsDAO {
 			yagoFactsBetweenEntities.add(resultSet.getString("rel"));
 	}
 	
+	public void getAllEntities(HashSet<String> yagoEntities) throws SQLException {
+
+		preparedStatement = connect.prepareStatement("select distinct subj from lector.yagofacts;");
+		resultSet = preparedStatement.executeQuery();
+
+		while(resultSet.next())
+			yagoEntities.add(resultSet.getString("subj"));
+		
+		preparedStatement = connect.prepareStatement("select distinct obj from lector.yagofacts;");
+		resultSet = preparedStatement.executeQuery();
+
+		while(resultSet.next())
+			yagoEntities.add(resultSet.getString("obj"));
+	}
+	
 	public void getAllRelationsFromScoredFacts(List<String> relations) throws SQLException {
 
 		preparedStatement = connect.prepareStatement("select distinct rel from lector.relPhraseScore;");
@@ -91,8 +108,14 @@ public class FactsRelationsDAO {
 	
 	public void getMostRelevantPhrasesForRelation(String relation,Map<String,List<String>> phraseToRelation) throws SQLException {
 		double threashold=0.5;
+		
 
-		preparedStatement = connect.prepareStatement("select rel, phrase, score from relPhraseScore where rel='"+relation+"' and probability>'"+threashold+"' limit 20;");
+	//	preparedStatement = connect.prepareStatement("select rel, phrase, score from relPhraseScore where rel='"+relation+"' and probability>'"+threashold+"' order by probability,score desc limit 20;");
+
+	//	preparedStatement = connect.prepareStatement("select rel, phrase, score from relPhraseScore where rel='"+relation+"' and probability>'"+threashold+"' limit 20;");
+	
+		preparedStatement = connect.prepareStatement("select rel, phrase, score from relPhraseScore where rel='"+relation+"' and probability>='"+threashold+"'order by score desc limit 20;");
+
 		resultSet = preparedStatement.executeQuery();
 
 		String phrase;
@@ -103,6 +126,7 @@ public class FactsRelationsDAO {
 			if(phraseToRelation.containsKey(phrase))
 				phraseToRelation.get(phrase).add(relation);
 			else{
+				
 				List<String>relationsList=new LinkedList<String>();
 				relationsList.add(relation);
 				phraseToRelation.put(phrase, relationsList);
@@ -110,6 +134,19 @@ public class FactsRelationsDAO {
 
 		}
 
+	}
+	
+	public Map<String,List<String>> populatePhraseRelationMapByProbability() throws SQLException{
+		List<String> relations= new LinkedList<String>();
+		this.getAllRelationsFromScoredFacts(relations);
+
+		Map<String,List<String>> phraseToRelation=new  HashMap<String,List<String>>();
+
+		for(String relation:relations){
+			this.getMostRelevantPhrasesForRelation(relation, phraseToRelation);			
+		}
+
+		return phraseToRelation;
 	}
 
 
