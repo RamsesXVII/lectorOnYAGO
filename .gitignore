@@ -12,3 +12,4 @@ _Store
 .classpath
 *.jar
 /stanford-corenlp-*/*
+/harvestedFact/

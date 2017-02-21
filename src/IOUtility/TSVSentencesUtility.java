@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.univocity.parsers.tsv.TsvParser;
@@ -31,31 +32,31 @@ public class TSVSentencesUtility {
 		return  parser.parseAll(this.getFileReader(pathToFile));
 	}
 
-//	/**
-//	 * removeNoWordContent ha in input una frase presa dal file TSV e ne restituisce una lista
-//	 * @param phrase: frase presa dal TSV
-//	 * @return result: lista di stringhe, in prima posizione abbiamo la frase pulita dalle parentesi tra
-//	 * le entità, nelle posizioni successive abbiamo le stringhe delle varie entità presenti es entità:
-//	 * [[Microsoft|m.04sv4]]
-//	 */
-//	public List<String> removeNoWordContent(String phrase){
-//		List<String> result = new ArrayList<>();
-//		result.add(phrase.replaceAll("\\[\\[","").replaceAll("\\|[[a-z]*[A-Z]*[0-9]*[.]*[_]*]*\\]\\]","").replaceAll("_", " "));
-//		int beginIndex = 0;
-//		int endIndex;
-//		while (phrase.indexOf("[[",beginIndex)!=-1){
-//			beginIndex = phrase.indexOf("[[",beginIndex);
-//			endIndex = phrase.indexOf("]]",beginIndex+1)+2;
-//			String entity=null;
-//			try{
-//			entity = phrase.substring(beginIndex, endIndex);
-//			}catch(Exception e){
-//				System.out.println("ciao");
-//			}
-//			beginIndex = endIndex;
-//			result.add(entity);
-//		}
-//	
-//		return result;
-//	}
+	/**
+	 * removeNoWordContent ha in input una frase presa dal file TSV e ne restituisce una lista
+	 * @param phrase: frase presa dal TSV
+	 * @return result: lista di stringhe, in prima posizione abbiamo la frase pulita dalle parentesi tra
+	 * le entità, nelle posizioni successive abbiamo le stringhe delle varie entità presenti es entità:
+	 * [[Microsoft|m.04sv4]]
+	 */
+	public List<String> removeNoWordContent(String phrase){
+		List<String> result = new ArrayList<>();
+		result.add(phrase.replaceAll("\\[\\[","").replaceAll("\\|[[a-z]*[A-Z]*[0-9]*[.]*[_]*]*\\]\\]","").replaceAll("_", " "));
+		int beginIndex = 0;
+		int endIndex;
+		while (phrase.indexOf("[[",beginIndex)!=-1){
+			beginIndex = phrase.indexOf("[[",beginIndex);
+			endIndex = phrase.indexOf("]]",beginIndex+1)+2;
+			String entity=null;
+			try{
+			entity = phrase.substring(beginIndex, endIndex);
+			}catch(Exception e){
+				System.out.println("ciao");
+			}
+			beginIndex = endIndex;
+			result.add(entity);
+		}
+	
+		return result;
+	}
 }

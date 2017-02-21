@@ -6,7 +6,7 @@ public class main2 {
 
 	public static void main(String[] args) {
 
-		for(int i=3;i<=57;i++){
+		for(int i=1;i<=57;i++){
 			SentencesSplitter s= new SentencesSplitter("file"+i+".tsv");
 
 			try {

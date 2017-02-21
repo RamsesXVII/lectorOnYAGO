@@ -19,26 +19,28 @@ public class FactHarvester {
 	private TSVSentencesUtility tSVSentencesUtility;
 	private List<String[]> allRows;
 	private FileInteractor fileInteractor;
-	
+
 	private Map<String,List<String>>phraseToRelation;
+	private HashSet<String> allEntities;
 
+	public FactHarvester(){
 
-	public FactHarvester(String pathToFile,Map<String,List<String>>phraseToRelation) throws ClassNotFoundException, SQLException, UnsupportedEncodingException, FileNotFoundException{
+	}
+
+	public FactHarvester(String pathToFile,Map<String,List<String>>phraseToRelation,HashSet<String> allEntities) throws ClassNotFoundException, SQLException, UnsupportedEncodingException, FileNotFoundException{
 		this.scoreDAO = new FactsRelationsDAO();
 
 		this.tSVSentencesUtility = new TSVSentencesUtility();
 		this.allRows = tSVSentencesUtility.getAllSentencesFromTSV(pathToFile);
 		this.fileInteractor = new FileInteractor();
-		
+
 		this.phraseToRelation=phraseToRelation;
+		this.allEntities=allEntities;
 
 	}
 
 	public void harvestNewFacts(int i) throws SQLException, UnsupportedEncodingException, FileNotFoundException, IOException{
 
-		HashSet<String>allEntities= new HashSet<>();
-		//this.scoreDAO.getAllEntities(allEntities);
-		this.getAllEntitiesFromTSV(allEntities);
 
 		for(String[] phrase : allRows)
 		{
@@ -57,6 +59,7 @@ public class FactHarvester {
 					obj = obj.replaceAll("'","''");
 
 				if(allEntities.contains(subj)&&allEntities.contains(obj)){
+				//if(true){
 
 					for(String relation:relations){
 						boolean factAlreadyPresent=false;
@@ -79,13 +82,15 @@ public class FactHarvester {
 
 
 
-	private void getAllEntitiesFromTSV(HashSet<String> allEntities) throws UnsupportedEncodingException, FileNotFoundException {
+	public void getAllEntitiesFromTSV(HashSet<String> allEntities) throws UnsupportedEncodingException, FileNotFoundException {
 		TSVSentencesUtility  tSVSentencesU = new TSVSentencesUtility();
-		List<String[]> allRow = tSVSentencesU.getAllSentencesFromTSV("uniqueEntities.tsv");
+	//	List<String[]> allRow = tSVSentencesU.getAllSentencesFromTSV("uniqueEntities.tsv");
+		List<String[]> allRow = tSVSentencesU.getAllSentencesFromTSV("uniqEntitiesFromYAGOTypes.tsv");
+		
 		for(String[] phrase : allRow){
 			allEntities.add(phrase[0]);
 		}
-		
+
 	}
 
 
