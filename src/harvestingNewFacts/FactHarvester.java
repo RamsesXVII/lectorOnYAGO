@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,10 @@ public class FactHarvester {
 
 	public void harvestNewFacts(int i) throws SQLException, UnsupportedEncodingException, FileNotFoundException, IOException{
 
+		HashSet<String>allEntities= new HashSet<>();
+		//this.scoreDAO.getAllEntities(allEntities);
+		this.getAllEntitiesFromTSV(allEntities);
+
 		Map<String,List<String>>phraseToRelation=this.populatePhraseRelationMapByProbability();
 
 		for(String[] phrase : allRows)
@@ -50,23 +55,37 @@ public class FactHarvester {
 				if (obj.contains("'"))
 					obj = obj.replaceAll("'","''");
 
-				for(String relation:relations){
-					boolean factPresent=false;
-					scoreDAO.getAllRelationsBeweenEntitiesDAO(relationsInYAGO, subj, obj);
+				if(allEntities.contains(subj)&&allEntities.contains(obj)){
 
-					for(String relationInYAGO:relationsInYAGO){
-						if (relationInYAGO.equals(relation))
-							factPresent=true;
+					for(String relation:relations){
+						boolean factAlreadyPresent=false;
+						scoreDAO.getAllRelationsBeweenEntitiesDAO(relationsInYAGO, subj, obj);
+
+						for(String relationInYAGO:relationsInYAGO){ //attenzione: potrebbero non esserci relazione tra le entita
+
+							if (relationInYAGO.equals(relation))
+								factAlreadyPresent=true;
+
+						}
+
+						if(!factAlreadyPresent)// altrimenti prendeva solo quelli per cui c'era  già una relazione, perchè non erano 111K?
+							this.fileInteractor.writeFile(phrase[0]+"\t"+phrase[1]+"\t"+phrase[2]+"\t"+relation, "harvestedFacts.tsv");
 					}
-
-					if(factPresent)
-						this.fileInteractor.writeFile(phrase[0]+"\t"+phrase[1]+"\t"+phrase[2]+"\t"+relation, "harvestedFacts.tsv");
 				}
 			}
 		}
 	}
 
 
+
+	private void getAllEntitiesFromTSV(HashSet<String> allEntities) throws UnsupportedEncodingException, FileNotFoundException {
+		TSVSentencesUtility  tSVSentencesU = new TSVSentencesUtility();
+		List<String[]> allRow = tSVSentencesU.getAllSentencesFromTSV("uniqueEntities.tsv");
+		for(String[] phrase : allRow){
+			allEntities.add(phrase[0]);
+		}
+		
+	}
 
 	private Map<String,List<String>> populatePhraseRelationMapByProbability() throws SQLException{
 		List<String> relations= new LinkedList<String>();
