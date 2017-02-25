@@ -11,9 +11,12 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Set;
 
 import IOUtility.FileInteractor;
+import relationIdentifier.RelationalIdentifier;
 
+//import relationIdentifier.RelationalIdentifier;
 
 public class FileInteractor {
 
@@ -57,19 +60,64 @@ public class FileInteractor {
 			relation = relation+word+" ";
 		}
 		f.writeFile("Frase relazionale: "+relation, "phrasesExtracted");
-
+		RelationalIdentifier ri = new RelationalIdentifier();
 		String fatto = "";
 		int i = 1;
 		for (String string : entityListDependencies) {
+			System.out.println("Prova var: "+string);
 			fatto = "";
 			if(!entityListNsubj.isEmpty())
-				fatto = fatto+entityListNsubj.get(0)+" ";
+				fatto = fatto+entityListNsubj.get(0)+"\t";
 			fatto = fatto+relation+" ";
 			fatto = fatto+string;
 			f.writeFile("Fatto "+i+": "+fatto, "phrasesExtracted");
 			i++;
 		}
 		f.writeFile("\n", "phrasesExtracted");
+
+		return relation;
+	}
+	public String writeFactsExtractedOnFile2(String cleanPhrase, List<String> phraseEntitiesList,List<String> relationProv, Set<String> entityDependenciesNmod, List<String> entityListNsubj) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+
+		String relation = "";
+		FileInteractor f = new FileInteractor();
+//		f.writeFile("Frase Iniziale: "+cleanPhrase, "phrasesExtracted");
+		if(!relationProv.isEmpty()&&!entityDependenciesNmod.isEmpty()&&!entityListNsubj.isEmpty()){
+				
+	
+			
+			for (String entity : phraseEntitiesList) {
+	//			f.writeFile(entity, "phrasesExtracted");
+			}
+			for (String word : relationProv) {
+				relation = relation+word+" ";
+			}
+	//		f.writeFile("Frase relazionale: "+relation, "phrasesExtracted");
+//			RelationalIdentifier ri = new RelationalIdentifier();
+			String fatto = "";
+			int i = 1;
+	//		for (String string : entityDependenciesNmod) {
+	//			System.out.println("Prova var: "+string);
+	//			fatto = "";
+	//			if(!entityListNsubj.isEmpty())
+	//				fatto = fatto+entityListNsubj.get(0)+"\t";
+	//			fatto = fatto+relation+" ";
+	//			fatto = fatto+string;
+	//			f.writeFile("Fatto "+i+": "+fatto, "phrasesExtracted");
+	//			i++;
+	//		}
+			for (String string : entityDependenciesNmod) {
+	//			System.out.println("Prova var: "+string);
+				fatto = "";
+				if(!entityListNsubj.isEmpty())
+					fatto = fatto+entityListNsubj.get(0)+"\t";
+				fatto = fatto+relation+"\t";
+				fatto = fatto+string;
+				f.writeFile(fatto, "phrasesExtracted");
+				i++;
+			}
+	//		f.writeFile("\n", "phrasesExtracted");
+		}
 
 		return relation;
 	}

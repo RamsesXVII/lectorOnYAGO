@@ -17,8 +17,8 @@ public class DependenciesNavigator {
 		this.nodes=nodes;
 	}
 	/**
-	 * governor2dependents restituisce una mappa per una specifica dipendenza dove la chiave è 
-	 * un governor mentre i valori aono una lista di dependent di quel governor
+	 * governor2dependents restituisce una mappa per una specifica dipendenza dove la chiave e'
+	 * un governor mentre i valori sono una lista di dependent di quel governor
 	 * @param nodes: lista delle dipendenze in formato XML
 	 * @param depType: dipendenza che si vuole cercare
 	 * @return governor2dependents: mappa per una specifica dipendenza dove la chiave è 
@@ -239,9 +239,16 @@ public class DependenciesNavigator {
 							startPosition = supPosition;
 					}
 				}
-				else{
-					startPosition = startPositionNsubj(el);
-				}
+				/*
+				 * Frase da verificare
+				 * Hans_Florine	m.019cs0	6	[[Hans_Florine|m.019cs0]]  is an [[United_States|m.09c7w0]] rock climbing , who 
+				 * together with [[Alex_Honnold|m.0drw_c4]] holds the Speed Climb World Record for climbing The Nose of 
+				 * [[Yosemite_Valley|m.0d82m]] 's [[El_Capitan|m.030bk1]] in 2:23:46  , set on June 17 , 2012 which broke the 
+				 * previous record of 2:36.45 set by [[Dean_Potter|m.03cymqz]] and Sean Leary .
+				 */
+//				else{
+//					startPosition = startPositionNsubj(el);
+//				}
 			}
 		}
 		return startPosition;

@@ -25,3 +25,4 @@ yago_schema.tsv
 yago_taxonomy.tsv
 yago_types.tsv
 uniqEntitiesFromYAGOTypes.zip
+/target/

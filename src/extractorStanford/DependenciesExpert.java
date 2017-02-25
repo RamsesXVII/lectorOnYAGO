@@ -43,12 +43,15 @@ public class DependenciesExpert {
 		this.pipeline=pipeline;
 	}
 
-	public List<String> getEntityDependenciesList() {
-		List<String> entityListDep = new ArrayList<>();
+	public Set<String> getEntityDependenciesList() {
+		Set<String> entityListDep = new HashSet<>();
 		for (String nameDepNmod : dependentsNmodName) {
 			for (String nameEntity : phraseEntitiesList){
-				if (nameEntity.contains(nameDepNmod))
+//				if (!(nameEntity.contains(nameDepNmod))){
+				if (nameEntity.contains(nameDepNmod)) {
 					entityListDep.add(nameEntity);
+//					dependentsNmodName.remove(nameEntity);
+				}
 			}
 		}
 		return entityListDep;

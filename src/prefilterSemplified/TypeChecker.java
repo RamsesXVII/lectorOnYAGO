@@ -1,6 +1,5 @@
 package prefilterSemplified;
 
-import bsh.This;
 import phrasesFilter.SentencesSplitter;
 
 public class TypeChecker {
