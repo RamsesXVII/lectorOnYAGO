@@ -1,28 +1,28 @@
 package executor;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.uttesh.exude.exception.InvalidDataException;
 
 import dbInteractor.FactsRelationsDAO;
 import harvestingNewFacts.FactHarvester;
 
 public class NewFactsExtractor {
 
-	public static void main(String[]args) throws ClassNotFoundException, SQLException, UnsupportedEncodingException, FileNotFoundException{
+	public static void main(String[]args) throws ClassNotFoundException, SQLException, IOException, InvalidDataException{
 		Date start= new Date();
 		System.out.println(start);
 		
-		//trova per le relazioni le frasi più significative
+		//trova per le relazioni le frasi piï¿½ significative
 		FactsRelationsDAO fDao= new FactsRelationsDAO();
-		Map<String,List<String>>phraseToRelations= fDao.populatePhraseRelationMapByProbability();
-		
+		fDao.setUseStoppedAndGeneralized(true); //selezionare
+		Map<String,Set<String>>phraseToRelations= fDao.populatePhraseRelationMapByProbability();		
+			
 		//trova tutte le  entita presenti in yago
 		HashSet<String>allEntities= new HashSet<>();
 		FactHarvester fha= new FactHarvester();
@@ -30,8 +30,8 @@ public class NewFactsExtractor {
 		
 		for(int i=1;i<=57;i++){
 		try {
-			FactHarvester fh= new FactHarvester("splitted/splitted"+i+".txt",phraseToRelations,allEntities);
-			fh.harvestNewFacts(i);
+			FactHarvester fh= new FactHarvester("splittedGeneralizedAndStopped/generalized"+i+".tsv",phraseToRelations,allEntities);
+			fh.harvestNewFacts(i,true);
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class NewFactsExtractor {
 		
 	}
 		Date end= new Date();
-		System.out.println(end);
-	}
+		System.out.println(end);  
+	}  
 
 }

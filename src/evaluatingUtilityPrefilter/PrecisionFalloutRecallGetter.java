@@ -10,14 +10,13 @@ public class PrecisionFalloutRecallGetter {
 
 	public PrecisionFalloutRecallGetter(String pathToInitialDataset,String pathToAccepted, String pathToRefused){
 		this.pathToAcceptedFile=pathToAccepted;
-		this.pathToRefusedFile=pathToRefused;
+		this.setPathToRefusedFile(pathToRefused);
 		this.pathToInitialDataset=pathToInitialDataset;
 		this.lcounter= new ListAndNotListCounter(pathToInitialDataset);
 	}
 
 	public double getPrecision(){
 		this.lcounter.setPathToFile(pathToInitialDataset);
-
 
 		this.lcounter.setPathToFile(pathToAcceptedFile);
 
@@ -62,5 +61,13 @@ public class PrecisionFalloutRecallGetter {
 
 		return notListPhrasesRetrievedCount/notListPhrasesTotalCount;
 
+	}
+
+	public String getPathToRefusedFile() {
+		return pathToRefusedFile;
+	}
+
+	public void setPathToRefusedFile(String pathToRefusedFile) {
+		this.pathToRefusedFile = pathToRefusedFile;
 	}
 }

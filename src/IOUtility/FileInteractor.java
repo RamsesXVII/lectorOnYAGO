@@ -13,9 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import IOUtility.FileInteractor;
-import relationIdentifier.RelationalIdentifier;
 
-//import relationIdentifier.RelationalIdentifier;
 
 public class FileInteractor {
 
@@ -59,7 +57,7 @@ public class FileInteractor {
 			relation = relation+word+" ";
 		}
 		f.writeFile("Frase relazionale: "+relation, "phrasesExtracted");
-		RelationalIdentifier ri = new RelationalIdentifier();
+
 		String fatto = "";
 		int i = 1;
 		for (String string : entityListDependencies) {

@@ -4,7 +4,15 @@ _Store
 /bin/
 /errori/
 /metadata/
+/evaluation/
+/models/
 /splitted/
+/splittedGeneralized/
+/splittedGeneralizedAndStopped/
+/harvestedFact/
+/prefiltered/
+
+
 # Eclipse Core
 .project
 
@@ -12,3 +20,8 @@ _Store
 .classpath
 *.jar
 /stanford-corenlp-*/*
+ThreeNearEntities.tsv
+yago_schema.tsv
+yago_taxonomy.tsv
+yago_types.tsv
+uniqEntitiesFromYAGOTypes.zip

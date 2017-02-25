@@ -3,12 +3,7 @@ package phrasesListExpansion;
 import java.io.*;
 
 import extractorStanford.FactsListExtractor;
-import IOUtility.FileInteractor;
-import IOUtility.TSVSentencesUtility;
 import prefilter.ParallelFilter;
-//import splitter.PhraseSplitter;
-
-import java.util.List;
 
 public class mainPhrasesListAnalysis {
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -21,27 +16,6 @@ public class mainPhrasesListAnalysis {
 		
 		FactsListExtractor fe= new FactsListExtractor();
 		fe.do_extractFacts();
-//		splitter();
 	}
 
-//	private static void splitter() throws UnsupportedEncodingException, FileNotFoundException, IOException {
-//		TSVSentencesUtility t = new TSVSentencesUtility();
-//		List<String[]> allRows = t.getAllSentencesFromTSV("evaluationcorpus.tsv");
-//
-//		FileInteractor f = new FileInteractor();
-//
-//		PhraseSplitter splitter = new PhraseSplitter();
-//		for(String[] phrase : allRows){
-//			System.out.println("_______");
-//			f.writeFile("_______", "splitted.txt");
-//			List<String> phraseSplitted = splitter.splitPhrase(phrase[3]);
-//			System.out.println(phrase[3]);
-//			f.writeFile(phrase[3], "splitted.txt");
-//
-//			for (String string : phraseSplitted) {
-//				System.out.println(string);
-//				f.writeFile(string, "splitted.txt");
-//			}
-//		}
-//	}
 }

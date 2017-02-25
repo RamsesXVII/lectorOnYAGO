@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import IOUtility.FileInteractor;
 import IOUtility.TSVSentencesUtility;
@@ -20,14 +20,14 @@ public class FactHarvester {
 	private List<String[]> allRows;
 	private FileInteractor fileInteractor;
 
-	private Map<String,List<String>>phraseToRelation;
+	private Map<String,Set<String>>phraseToRelation;
 	private HashSet<String> allEntities;
 
 	public FactHarvester(){
 
 	}
 
-	public FactHarvester(String pathToFile,Map<String,List<String>>phraseToRelation,HashSet<String> allEntities) throws ClassNotFoundException, SQLException, UnsupportedEncodingException, FileNotFoundException{
+	public FactHarvester(String pathToFile,Map<String,Set<String>>phraseToRelation,HashSet<String> allEntities) throws ClassNotFoundException, SQLException, IOException{
 		this.scoreDAO = new FactsRelationsDAO();
 
 		this.tSVSentencesUtility = new TSVSentencesUtility();
@@ -39,30 +39,29 @@ public class FactHarvester {
 
 	}
 
-	public void harvestNewFacts(int i) throws SQLException, UnsupportedEncodingException, FileNotFoundException, IOException{
-
+	public void harvestNewFacts(int i, boolean inputIsStopperOrStammed) throws SQLException, UnsupportedEncodingException, FileNotFoundException, IOException{
 
 		for(String[] phrase : allRows)
 		{
 			if(phraseToRelation.containsKey(phrase[1])){
 
-				List<String>relations=phraseToRelation.get(phrase[1]);
-				List<String>relationsInYAGO=new LinkedList<>();
+				Set<String>relations=phraseToRelation.get(phrase[1]);
+				HashSet<String>relationsInYAGO=new HashSet<>();
 
 				String subj=scoreDAO.extractID(phrase[0]);
 				String obj=scoreDAO.extractID(phrase[2]);
 
-				if (subj.contains("'"))
-					subj = subj.replaceAll("'","''");
-
-				if (obj.contains("'"))
-					obj = obj.replaceAll("'","''");
-
 				if(allEntities.contains(subj)&&allEntities.contains(obj)){
-				//if(true){
 
 					for(String relation:relations){
 						boolean factAlreadyPresent=false;
+
+						if (subj.contains("'"))
+							subj = subj.replaceAll("'","''");
+
+						if (obj.contains("'"))
+							obj = obj.replaceAll("'","''");
+
 						scoreDAO.getAllRelationsBeweenEntitiesDAO(relationsInYAGO, subj, obj);
 
 						for(String relationInYAGO:relationsInYAGO){ //attenzione: potrebbero non esserci relazione tra le entita
@@ -72,8 +71,12 @@ public class FactHarvester {
 
 						}
 
-						if(!factAlreadyPresent)// altrimenti prendeva solo quelli per cui c'era  già una relazione, perchè non erano 111K?
-							this.fileInteractor.writeFile(phrase[0]+"\t"+phrase[1]+"\t"+phrase[2]+"\t"+relation, "harvestedFacts.tsv");
+						if(!factAlreadyPresent){// altrimenti prendeva solo quelli per cui c'era  giï¿½ una relazione, perchï¿½ non erano 111K?
+							if(inputIsStopperOrStammed)
+								this.fileInteractor.writeFile(phrase[0]+"\t"+phrase[3]+"\t"+phrase[2]+"\t"+relation+"\t"+phrase[1], "harvestedFacts.tsv");
+							else
+								this.fileInteractor.writeFile(phrase[0]+"\t"+phrase[1]+"\t"+phrase[2]+"\t"+relation, "harvestedFacts.tsv");
+						}
 					}
 				}
 			}
@@ -84,17 +87,10 @@ public class FactHarvester {
 
 	public void getAllEntitiesFromTSV(HashSet<String> allEntities) throws UnsupportedEncodingException, FileNotFoundException {
 		TSVSentencesUtility  tSVSentencesU = new TSVSentencesUtility();
-	//	List<String[]> allRow = tSVSentencesU.getAllSentencesFromTSV("uniqueEntities.tsv");
 		List<String[]> allRow = tSVSentencesU.getAllSentencesFromTSV("uniqEntitiesFromYAGOTypes.tsv");
-		
+
 		for(String[] phrase : allRow){
 			allEntities.add(phrase[0]);
 		}
-
 	}
-
-
-
-
-
 }

@@ -4,8 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import IOUtility.FileInteractor;
 import IOUtility.TSVSentencesUtility;
@@ -17,7 +18,7 @@ public class RelPhraseCountBuilder {
 	private FactsRelationsDAO factRelDAO;
 	private FileInteractor fileInteractor;
 
-	public RelPhraseCountBuilder(String pathToFile) throws ClassNotFoundException, SQLException, UnsupportedEncodingException, FileNotFoundException{
+	public RelPhraseCountBuilder(String pathToFile) throws ClassNotFoundException, SQLException, IOException{
 
 		this.tSVSentencesUtility = new TSVSentencesUtility();
 		this.allRows = tSVSentencesUtility.getAllSentencesFromTSV(pathToFile);
@@ -31,7 +32,7 @@ public class RelPhraseCountBuilder {
 
 		for(String[] phrase : allRows)
 		{
-			List<String> yagoFactsBetweenEntities=new LinkedList<>();
+			Set<String> yagoFactsBetweenEntities=new HashSet<>();
 
 			linec++;
 			if(linec%1000==0)
@@ -39,17 +40,18 @@ public class RelPhraseCountBuilder {
 
 			String subj=factRelDAO.extractID(phrase[0]);
 			String obj=factRelDAO.extractID(phrase[2]);
-			String phraseSentence=phrase[1];
-
+			
 			if (subj.contains("'"))
 				subj = subj.replaceAll("'","''");
 
 			if (obj.contains("'"))
 				obj = obj.replaceAll("'","''");
+			
+			String phraseSentence=phrase[1];
 
 			try{
 
-				//se non ci sono fatti esistenti in YAGO tra le entità la lista non conterrà elementi
+				//se non ci sono fatti esistenti in YAGO tra le entitï¿½ la lista non conterrï¿½ elementi
 				factRelDAO.getAllRelationsBeweenEntitiesDAO(yagoFactsBetweenEntities,subj,obj);
 
 				for(String relation:yagoFactsBetweenEntities){

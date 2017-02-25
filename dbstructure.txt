@@ -1,5 +1,20 @@
 LOAD DATA LOCAL INFILE 'C:\\Users\\matti\\Desktop\\yago_facts.tsv' INTO TABLE yagofacts (subj,rel,obj);
 LOAD DATA LOCAL INFILE 'C:\\Users\\Daniele\\Desktop\\yago\\yago_facts.tsv' INTO TABLE yagofacts (subj,rel,obj);
+LOAD DATA LOCAL INFILE 'C:\\Users\\matti\\Desktop\\yago_types.tsv' INTO TABLE yagoTypes(entity,rdf,type);
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\matti\\Download\\relPhraseCount\\relPhraseCount.csv' INTO TABLE relPhraseCount(rel,phrase,sum);
+LOAD DATA LOCAL INFILE 'C:\\Users\\matti\\Desktop\\relPhraseCount.csv' INTO TABLE relPhraseCount(rel,phrase,sum);
+
+
+/* TRANSITIVE TYPES IMPORT BOOST
+set session bulk_insert_buffer_size=256217728;
+set session myisam_sort_buffer_size=256217728;
+set global key_buffer_size=256217728;
+alter table yagotypesbig disable keys;
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\matti\\Desktop\\splitted\\test.tsv' IGNORE INTO TABLE yagoTypesBig(entity,type);
+*/
+
 
 CREATE TABLE yagoFacts (
                 subj VARCHAR(300) NOT NULL,
@@ -7,6 +22,15 @@ CREATE TABLE yagoFacts (
                 obj VARCHAR(300) NOT NULL,
                 PRIMARY KEY (subj,rel,obj)
         );
+
+CREATE TABLE yagoTypesBig(
+				entity VARCHAR(300) NOT NULL,
+				type VARCHAR(300) NOT NULL, 
+				PRIMARY KEY(entity,type)
+	 	);
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\matti\\Desktop\\NotForeignCleanedEssentialColumn.tsv' INTO TABLE yagoTypesBig(entity,type);
+
 
 CREATE TABLE relPhraseCount (
                 rel VARCHAR(300) NOT NULL,
@@ -29,4 +53,11 @@ CREATE TABLE extractedFacts (
                 obj VARCHAR(300) NOT NULL,
                 rel VARCHAR(300) NOT NULL,
                 PRIMARY KEY (subj,obj,rel)
+);
+
+CREATE TABLE yagoTypes(
+				entity VARCHAR(300) NOT NULL,
+				rdf VARCHAR(50), 
+				type VARCHAR(300) NOT NULL, 
+				PRIMARY KEY(entity,type)
 );

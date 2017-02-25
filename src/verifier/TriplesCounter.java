@@ -1,6 +1,7 @@
 package verifier;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -20,7 +21,7 @@ public class TriplesCounter {
 		this.allRows = tSVSentencesUtility.getAllSentencesFromTSV(pathTofile);
 	}
 
-	public int countEntitiesPresent(HashSet<String> allEntities) throws ClassNotFoundException, SQLException {
+	public int countEntitiesPresent(HashSet<String> allEntities) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException {
 		int conta=0;
 		FactsRelationsDAO fdao= new FactsRelationsDAO();
 
@@ -28,12 +29,6 @@ public class TriplesCounter {
 		{
 			String subj=fdao.extractID(phrase[0]);
 			String obj=fdao.extractID(phrase[2]);
-
-			if (subj.contains("'"))
-				subj = subj.replaceAll("'","''");
-
-			if (obj.contains("'"))
-				obj = obj.replaceAll("'","''");
 
 			if(allEntities.contains(subj)&&allEntities.contains(obj))
 			{

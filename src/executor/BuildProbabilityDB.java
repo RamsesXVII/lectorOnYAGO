@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.Date;
 
-import dbInteractor.ProbabilityBuilder;
 import dbInteractor.ProbabilityBuilder1;
 
 public class BuildProbabilityDB {

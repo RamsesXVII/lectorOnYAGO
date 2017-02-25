@@ -9,6 +9,8 @@ import relationIdentifier.RelationalIdentifier;
 public class SentencesSplitter {
 	private String pathTofile;
 	private RelationalIdentifier rIdentifier;
+	
+	public SentencesSplitter(){}
 
 	public SentencesSplitter(String  pathToTSVInputFile){
 		this.pathTofile=pathToTSVInputFile;

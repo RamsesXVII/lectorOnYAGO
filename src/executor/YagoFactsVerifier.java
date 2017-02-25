@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 
-import com.sun.media.sound.SimpleSoundbank;
-
 import harvestingNewFacts.FactHarvester;
 import verifier.TriplesCounter;
 /**

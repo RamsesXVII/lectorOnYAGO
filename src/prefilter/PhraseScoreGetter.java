@@ -57,8 +57,8 @@ public class PhraseScoreGetter implements ScoreGetter {
 			if(globalVal>=threashold)
 				return globalVal;
 
-			if((globalVal+0.8)>threashold&&phrase.contains("and"))
-				globalVal+=this.containsListOfThreeElementsPattern(phrase)*(0.8); //TODO richiedeva troppo tempo, quindi la eseguo soltanto su quelle che contengono un and
+		//	if((globalVal+0.8)>threashold&&phrase.contains("and"))
+		//		globalVal+=this.containsListOfThreeElementsPattern(phrase)*(0.8); //TODO richiedeva troppo tempo, quindi la eseguo soltanto su quelle che contengono un and
 
 		}
 
