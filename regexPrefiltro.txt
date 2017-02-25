@@ -1,5 +1,5 @@
 Regex Prefiltro Frasi Lista
-input:sentences_all.tsv (15597980)
+input:sentences_all.tsv (56369699)
 
 1)ALMENTO 3 ENTITA (sono 15597980)
 
