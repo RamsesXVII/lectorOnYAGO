@@ -9,6 +9,6 @@ egrep '.*\|.*\|.*\|.*'
 
 egrep "]][a-zA-Z0-9 \"',]{0,15}\[\["
 
-3)ALMENO DUE ENTITA SEPERATE DA AND (ci mette tempo, ne produce in output
+3)ALMENO DUE ENTITA SEPERATE DA AND (sono 3009416)
 e='\[\[[a-zA-Z0-9_()/,\.&-]*\|m.[a-zA-Z0-9_]*\]\]'
-egrep  ''$e'.{0,7} and .{0,7}'$e''
+egrep ''$e'.{0,7} and .{0,7}'$e''
