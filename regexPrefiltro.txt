@@ -11,4 +11,4 @@ egrep "]][a-zA-Z0-9 \"',]{0,15}\[\["
 
 3)ALMENO DUE ENTITA SEPERATE DA AND (ci mette tempo, ne produce in output
 e='\[\[[a-zA-Z0-9_()/,\.&-]*\|m.[a-zA-Z0-9_]*\]\]'
-egrep -c ''$e'.{0,7} and .{0,7}'$e''
+egrep  ''$e'.{0,7} and .{0,7}'$e''
