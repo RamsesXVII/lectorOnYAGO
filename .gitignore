@@ -1,4 +1,4 @@
-_Store
+/.se_Store
 
 *.class
 /bin/
@@ -11,7 +11,7 @@ _Store
 /splittedGeneralizedAndStopped/
 /harvestedFact/
 /prefiltered/
-
+/.settings/
 
 # Eclipse Core
 .project
