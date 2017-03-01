@@ -81,18 +81,11 @@ public class FileInteractor {
 		FileInteractor f = new FileInteractor();
 
 		if(!relationProv.isEmpty()&&!entityDependenciesNmod.isEmpty()&&!entityListNsubj.isEmpty()){
-				
-	
-			
-		
 			for (String word : relationProv) {
 				relation = relation+word+" ";
 			}
-
 			String fatto = "";
-
 			for (String string : entityDependenciesNmod) {
-
 				fatto = "";
 				if(!entityListNsubj.isEmpty())
 					fatto = fatto+entityListNsubj.get(0)+"\t";
@@ -100,9 +93,7 @@ public class FileInteractor {
 				fatto = fatto+string;
 				f.writeFile(fatto, "phrasesExtracted");
 			}
-
 		}
-
 		return relation;
 	}
 

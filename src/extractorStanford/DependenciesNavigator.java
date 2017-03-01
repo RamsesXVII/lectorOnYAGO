@@ -59,7 +59,6 @@ public class DependenciesNavigator {
 	 * @return finalPosition: la posizione minore di un governor e delle sue dipendendenze (di un certo tipo)
 	 */
 	public int lowerPositionDependent(Element governor, String depType) {
-		//		System.out.println("KKKK"+governor.getTextContent());
 		int finalPosition = Integer.parseInt(governor.getAttributes().getNamedItem("idx").getNodeValue());
 		Map<Element, List<Element>> governor2dependentsByCompound = this.governor2dependents(depType);
 		for (Element el : governor2dependentsByCompound.keySet()) {

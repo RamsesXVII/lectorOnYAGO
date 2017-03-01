@@ -47,10 +47,8 @@ public class DependenciesExpert {
 		Set<String> entityListDep = new HashSet<>();
 		for (String nameDepNmod : dependentsNmodName) {
 			for (String nameEntity : phraseEntitiesList){
-//				if (!(nameEntity.contains(nameDepNmod))){
 				if (nameEntity.contains(nameDepNmod)) {
 					entityListDep.add(nameEntity);
-//					dependentsNmodName.remove(nameEntity);
 				}
 			}
 		}
