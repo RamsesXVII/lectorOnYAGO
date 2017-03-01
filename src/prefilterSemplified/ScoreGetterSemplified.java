@@ -1,9 +1,10 @@
 package prefilterSemplified;
 
-import prefilter.ScoreGetter;
+import java.sql.SQLException;
 
 public class ScoreGetterSemplified implements ScoreGetter {
-	private double threashold=0.8;
+	private TypeChecker tc;
+	private double threashold=1.8;
 
 	private String[]listId={"such as","including","i\\.e\\.","like","both","for example","e\\.g\\."};
 
@@ -14,6 +15,9 @@ public class ScoreGetterSemplified implements ScoreGetter {
 
 	private String entityRegex=".*\\[\\[[a-zA-Z0-9_()/,\\.&-]{0,70}\\|m.[a-zA-Z0-9_]*\\]\\].*";
 
+	public  ScoreGetterSemplified() throws ClassNotFoundException, SQLException {
+		this.tc= new TypeChecker();
+	}
 
 	@Override
 	public double getScore(String phrase){
@@ -26,10 +30,8 @@ public class ScoreGetterSemplified implements ScoreGetter {
 		if(firstPart.contains("[")==false)
 			return 0;
 
-		globalVal+=this.containsListIdFollwedByEntity(phrase)*(0.4); //tiene conto di quella che matcha, quindi devono essercene almeno 2 complessivamente
+		globalVal+=this.containsListIdFollwedByEntity(phrase)*(0.5); //tiene conto di quella che matcha, quindi devono essercene almeno 2 complessivamente
 
-		if(globalVal>=threashold)
-			return globalVal;
 
 		globalVal+=this.containsQuantifiers(phrase)*(0.15); 
 		if(globalVal>=threashold)
@@ -43,13 +45,25 @@ public class ScoreGetterSemplified implements ScoreGetter {
 		if(globalVal>=threashold)
 			return globalVal;
 
-		globalVal+=this.getEntityCount(phrase)*(0.1);
+		globalVal+=this.getEntityCount(phrase)*(0.05);
 		if(globalVal>=threashold)
 			return globalVal;
 
 		globalVal+=this.getCommasCount(phrase)*(0.05);
 		if(globalVal>=threashold)
 			return globalVal;
+
+		boolean existMulti=false;
+		if(globalVal+1>threashold)
+			try {
+				existMulti=this.tc.existTwoEntitiesSameType(phrase);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		if(existMulti)
+			globalVal+=1.0;
 
 		return globalVal;
 	}

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
@@ -13,7 +14,6 @@ import java.util.concurrent.Executors;
 
 import evaluatingUtilityPrefilter.ListAndNotListCounter;
 import evaluatingUtilityPrefilter.PrecisionFalloutRecallGetter;
-import prefilter.FileSplitter;
 import IOUtility.TSVSentencesUtility;
 /**
  * classe che si occupa del riconoscimento delle frasi che probabilmente sono liste
@@ -38,8 +38,10 @@ public class ParallelFilterSemplified{
 	 * È un metodo parallelo, i vari thread lavoreranno su file diversi e alla fine il risultato verrò ricomposto
 	 * Se metrics utility on -> il file in input deve esseere etichettato con Y o N nel 4o campo tab
 	 * @param pathToFile
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void filterSentences(String pathToFile,boolean metricsUtilityOn) { 
+	public void filterSentences(String pathToFile,boolean metricsUtilityOn) throws ClassNotFoundException, SQLException { 
 		File f1 = new File("Accepted.tsv"); //mi assicuro che non esistano file già essitenti
 		f1.delete();
 		f1= new File("Refused.tsv");
@@ -54,11 +56,11 @@ public class ParallelFilterSemplified{
 		for(int i=0;i<this.NCPU;i++)
 			this.ecs.submit(new ListPhrasesFilterSemplified(fileroot+(i+1)+".tsv", "accepted"+(i+1)+".tsv", "refused"+(i+1)+".tsv",metricsUtilityOn));
 
-		int sum=0;
 
 		try {
+
 			for(int i=0; i<this.NCPU;i++){
-				sum+=this.ecs.take().get();
+				this.ecs.take().get();
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

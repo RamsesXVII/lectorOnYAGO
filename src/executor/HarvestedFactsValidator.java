@@ -11,7 +11,7 @@ import factsValidatorByType.RelationToDomainAndRangeBuilder;
 
 public class HarvestedFactsValidator {
 	public static void main(String[]args) throws IOException, ClassNotFoundException, SQLException{
-		
+		//meglio splittare e riavviare oltre le 150K fraasi
 			Date a = new Date();
 			System.out.println(a);
 			
@@ -20,7 +20,7 @@ public class HarvestedFactsValidator {
 			RelationToDomainAndRangeBuilder smap= new RelationToDomainAndRangeBuilder("yago_schema.tsv");
 			smap.relationToDomainAndRangeBuilder(relationToDomainAndRange);
 			
-			ExtractedFactsFilter efilter= new ExtractedFactsFilter("hspli05", relationToDomainAndRange);
+			ExtractedFactsFilter efilter= new ExtractedFactsFilter("harvestedFacts.tsv", relationToDomainAndRange);
 			efilter.filterFacts();
 			
 			a = new Date();

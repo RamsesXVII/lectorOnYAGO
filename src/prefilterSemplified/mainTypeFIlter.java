@@ -1,10 +1,12 @@
 package prefilterSemplified;
 
+import java.sql.SQLException;
+
 public class mainTypeFIlter {
-	public static void main(String[] args) {
-		String phrase="At the time , MSN.com also offered a custom start page and an [[Internet|m.03rlt]] tutorial , but [[Microsoft|m.04sv4]] 's major web portal was known as [[Microsoft|m.04sv4]] [[Internet|m.03rlt]] Start , located at .";
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		String phrase="The venue also hosted the [[2010_Lamar_Hunt_U.S._Open_Cup_Final|m.0ch38wd]] and [[2011_Lamar_Hunt_U.S._Open_Cup_Final|m.0gy1xj6]] tournament finals for the [[Lamar_Hunt_U.S._Open_Cup|m.01lkg2]] .";
 		TypeChecker tc= new TypeChecker();
-		tc.existTypePatter(phrase);
+		System.out.println(tc.existTwoEntitiesSameType(phrase));
 					
 			
 		

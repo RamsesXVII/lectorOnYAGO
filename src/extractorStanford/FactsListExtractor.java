@@ -15,7 +15,7 @@ public class FactsListExtractor {
 	public FactsListExtractor() throws UnsupportedEncodingException, FileNotFoundException{
 		this.result=new LinkedList<List<String>>();
 		this.tSVutility = new TSVSentencesUtility();
-		this.allRowsOfFile = tSVutility.getAllSentencesFromTSV("Accepted0.tsv");
+		this.allRowsOfFile = tSVutility.getAllSentencesFromTSV("Accepted.tsv");
 	}
 
 	public void do_extractFacts(){
@@ -24,7 +24,7 @@ public class FactsListExtractor {
 		for(String[] phrase : allRowsOfFile){
 			try {
 				List<String> cleanPhraseAndEntitesList = tSVutility.removeNoWordContent(phrase[3]);
-				
+				if(i%100==0)
 				System.out.println(i);
 				i = i+1;
 				List<String> ar = eb.extractFacts(cleanPhraseAndEntitesList);

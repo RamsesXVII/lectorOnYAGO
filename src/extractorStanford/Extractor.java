@@ -8,14 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.ws.Endpoint;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import IOUtility.XMLParser;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.ling.CoreAnnotations.NamedEntityTagAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
@@ -47,8 +44,8 @@ public class Extractor {
 
 		String cleanPhrase = cleanPhraseAndEntitesList.get(0);
 		DependenciesExpert dependenciesExpert=new DependenciesExpert(cleanPhrase,pipeline);
-///////////////////////
-//		String phraseEnhancedDependenciesXML=dependenciesExpert.getEnhancedDependenciesOfSingleSentence();
+
+
 		String phraseEnhancedDependenciesXML=null;
 		Annotation document =new Annotation(cleanPhrase);
 		pipeline.annotate(document);
@@ -58,13 +55,12 @@ public class Extractor {
 		for(CoreMap sentence: singlePhraseCoreMap) {
 			phraseEnhancedDependenciesXML= sentence.get(SemanticGraphCoreAnnotations.EnhancedPlusPlusDependenciesAnnotation.class).toString(SemanticGraph.OutputFormat.XML);
 		}
-/////////////////////////
 
 		try {
 
 			XMLParser x=new XMLParser(phraseEnhancedDependenciesXML);
 			NodeList nodes = x.getNodesByTag("dep");
-//			System.out.println("governoroopp: " + phraseEnhancedDependenciesXML);
+
 			DependenciesNavigator dependenciesNavigator = new DependenciesNavigator(nodes);
 
 			int finalPosition = 0;
@@ -73,7 +69,7 @@ public class Extractor {
 			int k = 0;
 			if(!typeNmod.isEmpty()) {
 				for (String type : typeNmod) {
-	//				System.out.println(type);
+
 					Map<Element, List<Element>> governor2dependentsByNmod = dependenciesNavigator.governor2dependents(type);
 					
 					// ogni governor di un nmod va analizzato come frase
@@ -85,7 +81,6 @@ public class Extractor {
 						if(dependents.size()>1){
 							for(Element e : dependents){
 								dependentsNmodName.add(e.getTextContent());
-	//							System.out.println("NMOD"+e.getTextContent());
 							}
 							
 	
@@ -111,37 +106,100 @@ public class Extractor {
 	//						VBZ is
 	//						VBG including
 							//inizia dalla parola dopo start position
-							boolean verbFound = false;
-							List<String> phraseNew = new ArrayList<>();
-							for (int i = startPosition+1; i < finalPosition; i++) {
-								CoreLabel token = singlePhraseCoreMap.get(0).get(TokensAnnotation.class).get(i-1);
-								String word = token.get(PartOfSpeechAnnotation.class);
-	
-								if(word.equals("VBN")){
-									int positionVerb = i;
-									int positionAux = 0;
-									positionAux = dependenciesNavigator.lowerPositionDependent(dependenciesNavigator.getElementByPosition(positionVerb), "aux");
-									if(positionAux!=0){
-										String nameAux= dependenciesNavigator.getElementByPosition(positionAux).getTextContent();
-										phraseNew.add(nameAux);
-										phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
-									}
-									else
-										phraseNew.add(word);
-									verbFound = true;
-								}
-							}
-							if (verbFound==false){
-								for (int i = startPosition+1; i < finalPosition; i++) {
-									CoreLabel token = singlePhraseCoreMap.get(0).get(TokensAnnotation.class).get(i-1);
-									String word = token.get(PartOfSpeechAnnotation.class);
-	
-									if(word.equals("VBD")||word.equals("VBZ")){
-										int positionVerb = i;
-										phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
-									}
-								}
-							}
+//							boolean verbFound = false;
+//							List<String> phraseNew = new ArrayList<>();
+//							int positionVerb = 0;
+//							for (int i = startPosition+1; i < finalPosition; i++) {
+//								CoreLabel token = singlePhraseCoreMap.get(0).get(TokensAnnotation.class).get(i-1);
+//								String word = token.get(PartOfSpeechAnnotation.class);
+//								if (word.equals("VBG")||word.equals("VBN")||word.equals("VBD")||word.equals("VBZ")) {
+//									Element finalVerb = dependenciesNavigator.getElementByPosition(i);
+//									positionVerb = i;
+//									System.out.println(positionVerb);
+//								}
+//							}
+////								if (word.equals("VBG")) {
+////							int positionVerb = i;
+//							if (positionVerb!=0){
+//
+//								int positionAux = 0;
+//								positionAux = dependenciesNavigator.lowerPositionDependent(dependenciesNavigator.getElementByPosition(positionVerb), "aux");
+//								if(positionAux!=0 && positionAux<positionVerb) {
+//									for (int j = positionAux; j < positionVerb; j++) {
+//										String nameAux = dependenciesNavigator.getElementByPosition(j).getTextContent();
+//										phraseNew.add(nameAux);
+//									}
+//									phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
+//								}
+//								int positionDobj = 0;
+//								positionDobj = dependenciesNavigator.lowerPositionDependentNoGovernor(dependenciesNavigator.getElementByPosition(positionVerb), "dobj");
+//								if (positionDobj!=0 && positionDobj<finalPosition) {
+//									phraseNew.add(dependenciesNavigator.getElementByPosition(positionDobj).getTextContent());
+//								}
+//								int positionXcomp = 0;
+//								positionXcomp = dependenciesNavigator.lowerPositionDependentNoGovernor(dependenciesNavigator.getElementByPosition(positionVerb), "xcomp");
+//								if (positionXcomp!=0 && positionXcomp<finalPosition) {
+//									phraseNew.add(dependenciesNavigator.getElementByPosition(positionXcomp).getTextContent());
+//								}
+//								int positionCop = 0;
+//								positionCop = dependenciesNavigator.positionGovernor(dependenciesNavigator.getElementByPosition(positionVerb), "cop");
+//								if (positionCop!=0) {
+//									positionAux = 0;
+//									positionAux = dependenciesNavigator.lowerPositionDependent(dependenciesNavigator.getElementByPosition(positionCop), "aux");
+//									if(positionAux!=0 && positionAux<=positionVerb) {
+//										for (int j = positionAux; j <= positionCop; j++) {
+//											String nameAux = dependenciesNavigator.getElementByPosition(j).getTextContent();
+//											phraseNew.add(nameAux);
+//										}
+////										phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
+//									}
+//								}
+////								verbFound = true;
+//							}
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+//								}
+//								if (word.equals("VBN")) {
+//									int positionVerb = i;
+//									int positionAux = 0;
+//									System.out.println("VERB "+positionVerb);
+//									positionAux = dependenciesNavigator.lowerPositionDependent(dependenciesNavigator.getElementByPosition(positionVerb), "aux");
+//									System.out.println("AUX  "+positionAux);
+//									if(positionAux!=0 && positionAux<positionVerb){
+//										String nameAux= dependenciesNavigator.getElementByPosition(positionAux).getTextContent();
+//										phraseNew.add(nameAux);
+//										phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
+//									}
+//									else
+//										phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
+//									verbFound = true;
+//								}
+//							}
+//							if (verbFound==false) {
+//								for (int i = startPosition+1; i < finalPosition; i++) {
+//									CoreLabel token = singlePhraseCoreMap.get(0).get(TokensAnnotation.class).get(i-1);
+//									String word = token.get(PartOfSpeechAnnotation.class);
+//	
+//									if(word.equals("VBD")||word.equals("VBZ")){
+//										int positionVerb = i;
+//										phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
+//									}
+//								}
+//							}
 	
 	
 							dependenciesExpert= new DependenciesExpert(dependentsNmodName,phraseEntitiesList,dependentsNsubjName,startPosition,finalPosition,nodes);
@@ -149,10 +207,11 @@ public class Extractor {
 							Set<String> entityDependenciesNmod = dependenciesExpert.getEntityDependenciesList();
 							List<String> entityNsubjList = dependenciesExpert.getEntityNsubjList();
 							List<String> phraseFromStartToEndPosition = dependenciesExpert.getRelationEntities();
+							List<String> relationalPhrase = createRelationalPhrase(startPosition,finalPosition,singlePhraseCoreMap,dependenciesNavigator);
 							
 							FileInteractor fileInteractor= new FileInteractor();
 							
-							String relation=fileInteractor.writeFactsExtractedOnFile2(cleanPhrase,phraseEntitiesList,phraseNew,entityDependenciesNmod,entityNsubjList);
+							String relation=fileInteractor.writeFactsExtractedOnFile2(cleanPhrase,phraseEntitiesList,relationalPhrase,entityDependenciesNmod,entityNsubjList);
 	
 	//						FileInteractor fileInteractor= new FileInteractor();
 	//														/						frase pulita [	entitnellafrase		
@@ -171,5 +230,52 @@ public class Extractor {
 			e.printStackTrace();
 		}
 		return relations;
+	}
+	private List<String> createRelationalPhrase(int startPosition, int finalPosition, List<CoreMap> singlePhraseCoreMap, DependenciesNavigator dependenciesNavigator) {
+//		boolean verbFound = false;
+		List<String> phraseNew = new ArrayList<>();
+		int positionVerb = 0;
+		for (int i = startPosition+1; i < finalPosition; i++) {
+			CoreLabel token = singlePhraseCoreMap.get(0).get(TokensAnnotation.class).get(i-1);
+			String word = token.get(PartOfSpeechAnnotation.class);
+			if (word.equals("VBG")||word.equals("VBN")||word.equals("VBD")||word.equals("VBZ")) {
+				Element finalVerb = dependenciesNavigator.getElementByPosition(i);
+				if(!finalVerb.getTextContent().equals("including"))
+					positionVerb = i;
+//				System.out.println(positionVerb);
+			}
+		}
+
+		int positionAux = 0;
+		if(positionVerb>0) {
+//			System.out.println("VERB "+positionVerb);
+//			Element e = dependenciesNavigator.getElementByPosition(positionVerb);
+			positionAux = dependenciesNavigator.lowerPositionDependent(dependenciesNavigator.getElementByPosition(positionVerb), "aux");
+//			System.out.println("AUX  "+positionAux);
+			if(positionAux!=0 && positionAux<positionVerb){
+				String nameAux= dependenciesNavigator.getElementByPosition(positionAux).getTextContent();
+				phraseNew.add(nameAux);
+				phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
+			}
+			else
+				phraseNew.add(dependenciesNavigator.getElementByPosition(positionVerb).getTextContent());
+	//		verbFound = true;
+			int positionPrep = 0;
+			boolean find = false;
+			for (int i = positionVerb+1; i < finalPosition && find==false; i++) {
+				CoreLabel token = singlePhraseCoreMap.get(0).get(TokensAnnotation.class).get(i-1);
+				String word = token.get(PartOfSpeechAnnotation.class);
+				if (word.equals("IN")) {
+					Element prep = dependenciesNavigator.getElementByPosition(i);
+					positionPrep = i;
+					for (int j = positionVerb+1; j <= positionPrep; j++) {
+						phraseNew.add(dependenciesNavigator.getElementByPosition(j).getTextContent());
+					}
+					find = true;
+	//				System.out.println(positionVerb);
+				}
+			}
+		}
+		return phraseNew;
 	}
 }

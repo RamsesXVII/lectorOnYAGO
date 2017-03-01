@@ -1,17 +1,18 @@
-/.se_Store
+_Store
 
 *.class
 /bin/
 /errori/
-/metadata/
-/evaluation/
-/models/
-/splitted/
-/splittedGeneralized/
-/splittedGeneralizedAndStopped/
-/harvestedFact/
-/prefiltered/
-/.settings/
+metadata/*
+evaluation/*
+models/*
+splitted/*
+splittedGeneralized/*
+splittedGeneralizedAndStopped/*
+harvestedFact/*
+prefiltered/*
+listFiles/*
+
 
 # Eclipse Core
 .project
@@ -26,3 +27,4 @@ yago_taxonomy.tsv
 yago_types.tsv
 uniqEntitiesFromYAGOTypes.zip
 /target/
+/.settings/

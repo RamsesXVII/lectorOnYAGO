@@ -1,47 +1,109 @@
 package prefilterSemplified;
 
+import java.sql.SQLException;
+import java.util.HashSet;
+
+import dbInteractor.TypesDAO;
 import phrasesFilter.SentencesSplitter;
 
 public class TypeChecker {
 	private SentencesSplitter sentenceUtility; //metodi di utility utili in questa fase
+	private TypesDAO tdao;
 
-	public TypeChecker(){
+
+	public TypeChecker() throws ClassNotFoundException, SQLException{
 		this.sentenceUtility= new SentencesSplitter();
+		this.tdao= new TypesDAO();
+
 	}
 
-	public boolean existTypePatter(String phrase){
+
+	public boolean existTwoEntitiesSameType(String phrase) throws SQLException{
+
+		HashSet<String>entitiesID=this.getAllEntitiesIdFromPhrase(phrase);
+		HashSet<String>types=new HashSet<>(); 
+
+		for(String entity:entitiesID ){
+			if (entity.contains("'"))
+				entity = entity.replaceAll("'","''");
+
+			HashSet<String>typesOfEntity=new HashSet<String>();
+			tdao.getTypesFromEntity(entity, typesOfEntity);
+
+			for(String type:typesOfEntity)
+				if(!types.add(type))
+					if(this.typeIsNotRoot(type)){
+						return true;}
+		}
+		return false;
+
+	}
+
+
+	private boolean typeIsNotRoot(String type) 
+	{
+
+		if(type.equals("wordnet_whole_100003553"))
+			return false;
+		if(type.equals("owl:Thing"))
+			return false;
+		if(type.equals("wordnet_causal_agent_100007347"))
+			return false;
+		if(type.equals("wordnet_object_100002684"))
+			return false;
+		if(type.equals("wordnet_organism_100004475"))
+			return false;
+		if(type.equals("yagoGeoEntity"))
+			return false;
+		if(type.equals("yagoLegalActor"))
+			return false;
+		if(type.equals("yagoLegalActorGeo"))
+			return false;
+		if(type.equals("wordnet_abstraction_100002137"))
+			return false;
+		if(type.equals("yagoPermanentlyLocatedEntity"))
+			return false;
+		if(type.equals("yagoGeoEntity"))
+			return false;
+		if(type.equals("wordnet_physical_entity_100001930"))
+			return false;
+		if(type.equals("wordnet_abstraction_100002137"))
+			return false;
+		if(type.equals("wordnet_artifact_100021939"))
+			return false;
+		if(type.equals("wordnet_organization_108008335"))
+			return false;
+		if(type.equals("wordnet_communicator_109610660"))
+			return false;
+		if(type.equals("wordnet_living_thing_100004258"))
+			return false;
+		if(type.equals("wordnet_person_100007846"))
+			return false;
+
+
+		
+		
+		
+
+		return true;
+
+	}
+
+
+	public HashSet<String>getAllEntitiesIdFromPhrase(String phrase){
 		int numberOfEntities=this.sentenceUtility.getNumberOfEntities(phrase);
+		HashSet<String>allPhraseEntities=new HashSet<>();
 
 		for(int i=1;i<=numberOfEntities;i++){
-
-			//	String phraseBetweenEntities=(phrase.substring(this.sentenceUtility.getNthOccurenceOfCharacter(phrase, "]]", i), this.sentenceUtility.getNthOccurenceOfCharacter(phrase, "[[", i+1)));
-
-			//System.out.println(phraseBetweenEntities);
-
 			int prev=this.sentenceUtility.getNthOccurenceOfCharacter(phrase, "[[", i);
 			int next=this.sentenceUtility.getNthOccurenceOfCharacter(phrase, "]]", i);
-			System.out.println(phrase.substring(prev,next+2));
-			System.out.println(this.sentenceUtility.getNthOccurenceOfCharacter(phrase, phrase.substring(prev,next+2), 1));
-			System.out.println(this.getNumberOfOccurenciesOfEntity(phrase, phrase.substring(prev,next+2)));
-			/*		if(next-prev<10){
-				String entityPrev=this.getEntityPrev(phrase,prev,i);
-				String entityNext=this.getentityNext(phrase,prev,i);
-			}*/
 
-			//	System.out.println(this.getEntityIDPrev(prev, phrase));
+			String id=phrase.substring(prev+2,next);
+			allPhraseEntities.add(id.substring(0,id.indexOf("|")));
 
 		}
-		return true;
-	}
+		return allPhraseEntities;
 
-	public int getNumberOfOccurenciesOfEntity(String phrase,String entity){
-		int count=0;
-		for(int i=0;i<100;i++)
-			if(this.sentenceUtility.getNthOccurenceOfCharacter(phrase,entity, i)==-1)
-				break;
-			else
-				count++;
-		return count;
 	}
 
 }

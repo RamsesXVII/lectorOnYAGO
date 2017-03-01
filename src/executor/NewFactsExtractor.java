@@ -17,30 +17,30 @@ public class NewFactsExtractor {
 	public static void main(String[]args) throws ClassNotFoundException, SQLException, IOException, InvalidDataException{
 		Date start= new Date();
 		System.out.println(start);
-		
+
 		//trova per le relazioni le frasi pi� significative
 		FactsRelationsDAO fDao= new FactsRelationsDAO();
-		fDao.setUseStoppedAndGeneralized(true); //selezionare
+		fDao.setUseOnlyGeneralized(true); //selezionare
 		Map<String,Set<String>>phraseToRelations= fDao.populatePhraseRelationMapByProbability();		
-			
+
 		//trova tutte le  entita presenti in yago
 		HashSet<String>allEntities= new HashSet<>();
 		FactHarvester fha= new FactHarvester();
 		fha.getAllEntitiesFromTSV(allEntities);
-		
-		for(int i=1;i<=57;i++){
-		try {
-			FactHarvester fh= new FactHarvester("splittedGeneralizedAndStopped/generalized"+i+".tsv",phraseToRelations,allEntities);
-			fh.harvestNewFacts(i,true);
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		for(int i=1;i<=1;i++){
+			try {
+				FactHarvester fh= new FactHarvester("phrasesExtracted"+i+".tsv",phraseToRelations,allEntities);
+				fh.harvestNewFacts(i,false);//use stoppedor stammed
+			} catch (SQLException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-		
-	}
 		Date end= new Date();
 		System.out.println(end);  
 	}  

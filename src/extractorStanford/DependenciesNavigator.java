@@ -71,6 +71,37 @@ public class DependenciesNavigator {
 		return finalPosition;
 	}
 	/**
+	 * lowerPositionDependentNoGovernor ritorna la posizione minore delle dipendendenze di un governor (di un certo tipo)
+	 * @param nodes: lista delle dipendenze in formato XML
+	 * @param governor: governor di partenza
+	 * @param depType: dipendenza che si vuole analizzare
+	 * @return finalPosition: la posizione minore delle dipendendenze di un governor (di un certo tipo), ritorna 0 se non ha quella dipendenza
+	 */
+	public int lowerPositionDependentNoGovernor(Element governor, String depType) {
+		int finalPosition = 0;
+		Map<Element, List<Element>> governor2dependentsByCompound = this.governor2dependents(depType);
+		for (Element el : governor2dependentsByCompound.keySet()) {
+			if (el.getTextContent().equals(governor.getTextContent())
+					&& el.getAttributes().getNamedItem("idx").getNodeValue().equals(governor.getAttributes().getNamedItem("idx").getNodeValue())){
+				finalPosition = lowerPosition(governor2dependentsByCompound.get(el));
+			}
+		}
+		return finalPosition;
+	}
+	public int positionGovernor(Element dependent, String depType) {
+		Map<Element, List<Element>> governor2dependentsByDepType = this.governor2dependents(depType);
+		int positionGov = 0;
+		for (Element el : governor2dependentsByDepType.keySet()) {
+			for (Element dep : governor2dependentsByDepType.get(el)){
+				if (dep.getTextContent().equals(dependent.getTextContent())
+						&& dep.getAttributes().getNamedItem("idx").getNodeValue().equals(dependent.getAttributes().getNamedItem("idx").getNodeValue())){
+					positionGov = Integer.parseInt(dep.getAttributes().getNamedItem("idx").getNodeValue());
+				}
+			}
+		}
+		return positionGov;
+	}
+	/**
 	 * 
 	 * @param nodes
 	 * @param position

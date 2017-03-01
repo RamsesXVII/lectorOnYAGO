@@ -3,6 +3,7 @@ package prefilterSemplified;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -24,7 +25,7 @@ public class ListPhrasesFilterSemplified implements Callable<Integer> {
 	private boolean metricsUtilityOn;
 
 
-	public ListPhrasesFilterSemplified(String pathToSentencesFile,String pathToAcceptedSentencesFile, String pathToRefusedSentencesFile, boolean metricsUtilityOn){
+	public ListPhrasesFilterSemplified(String pathToSentencesFile,String pathToAcceptedSentencesFile, String pathToRefusedSentencesFile, boolean metricsUtilityOn) throws ClassNotFoundException, SQLException{
 		this.setPathToSentencesFile(pathToSentencesFile);
 		this.setPathToAcceptedSentencesFile(pathToAcceptedSentencesFile);
 		this.setPathToRefusedSentencesFile(pathToRefusedSentencesFile);
